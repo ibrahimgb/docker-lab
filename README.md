@@ -34,7 +34,7 @@ Il est fortement conseillé de dérouler ce TP sur une machine Linux (Ubuntu, Fe
 1. Installez Docker dans votre environnement de développement.
 2. Clonez ce dépot.
 
-## [PARTIE 1] Dockerisation de l'Application
+## [PARTIE 1] Dockeriser une application
 
 ### Commandes Utiles
 
@@ -61,43 +61,28 @@ Il est fortement conseillé de dérouler ce TP sur une machine Linux (Ubuntu, Fe
 
 D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/docker/).
 
-<details>
-<summary>Étape 1 : version scratch À EFFACER SI NON RETENU</summary>
+### Tâche 1 : Créer une Image Docker à partir de `scratch`
 
-### Étape 1: Créer une Image Docker à partir de `scratch`
-> Pour la syntaxe du Dockerfile, vous pouvez consulter la documentation officielle de Docker, lien ci-dessous.
+> Créez un `Dockerfile` à partir d'une image vierge :
+>    - Compilez le fichier `hello.c` (dans le dossier **step1.1**) avec `gcc -o hello_dyn hello.c`
+>    - Créez un Dockerfile et utilisez `scratch` comme image de base.
+>    - Ajoutez le fichier binaire `hello_dyn` et définissez la commande de démarrage.
+>    - Build et exécutez l'image. Est-ce que le conteneur démarre correctement ?
 
-1. Création d'un `Dockerfile` à partir d'une image vierge:
-    - Utilisez une image de base `scratch`.
-    - Ajoutez le binaire `hello` en commande de démarrage.
-    - Build, run et vérifiez que tout fonctionne correctement.
+> Compilez maintenant le fichier `hello.c` avec `gcc -static -o hello hello.c` et utilisez ce binaire au lieu de `hello_dyn`.
+>   - Quelle est la différence entre les deux commandes de compilation ?
 
-2. Ici on va étendre l'image scratch avec l'application Java.
-    - Installez les dépendances nécessaires pour OpenCV.
-    - Ajoutez les fichiers sources et compilez l'application.
-    - Assurez d'avoir la bonne commande de démarrage du conteneur.
-</details>
+### Tâche 2 : Containériser une application existante
 
-<details> 
-<summary>Étape 1 : version non scratch À EFFACER SI NON RETENUE</summary>
-
-### Étape 1: Premiers pas avec Docker
-> Pour la syntaxe du Dockerfile, vous pouvez consulter la documentation officielle de Docker, lien ci-dessous.
-
-1. Création d'un `Dockerfile` à partir d'une image de base:
-    - Utilisez une image de base de votre choix (debian, ubuntu, etc.).
-    - Ajoutez `echo "Hello World"` en commande de démarrage.
-    - Build, run et vérifiez que tout fonctionne correctement.
-
-2. Ici on va étendre l'image de base avec l'application Java.
-    - Installez les dépendances nécessaires pour OpenCV.
-    - Ajoutez les fichiers sources et compilez l'application.
-    - Assurez d'avoir la bonne commande de démarrage du conteneur.
-</details>
+> Maintenant, on va utiliser comme image de base quelque chose de plus traditionnel, par exemple `ubuntu:18.04` (ou voir d'autres images pertinentes dans le Docker Hub).
+>    - Installez les dépendances nécessaires pour OpenCV.
+>    - Ajoutez les fichiers sources (dans le dossier **step1.2**) et compilez l'application.
+>    - Assurez-vous d'avoir la bonne commande de démarrage du conteneur.
 
 <details>
 <summary>Cliquer pour des liens utiles</summary>
 
+- [Dockerhub - repo images](https://hub.docker.com/)
 - [Dockerfile Reference](https://docs.docker.com/reference/dockerfile)
 </details>
 
@@ -118,11 +103,11 @@ D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/
 - L'application est accessible sur le port 8080. Assurez-vous d'exposer ce port ou de le bind à un port de votre choix au démarrage du conteneur. Si tout est correct, http://localhost:8080 devrait être ouvert depuis votre navigateur.
 </details>
 
-### Étape 2: Créer une version _Light_ de l'Image
+### Tâche 3 : Améliorer le Dockerfile pour une image plus _light_
 
-Maintenant que vous avez une image fonctionnelle, vous allez essayer de la rendre plus légère. 
-
-1. Proposez un nouveau fichier Dockerfile qui permet de créer une image de taille réduite.
+>Maintenant que vous avez une image fonctionnelle, vous allez essayer de la rendre plus légère. 
+>
+>Proposez un nouveau fichier Dockerfile qui permet de créer une image de taille réduite.
 
 <details>
 <summary>Cliquer pour des liens utiles</summary>
@@ -132,11 +117,8 @@ Maintenant que vous avez une image fonctionnelle, vous allez essayer de la rendr
 
 </details>
 
-## [PARTIE 2] Configuration d'un reverse proxy sous Docker
-
-
-
-### Étape 1: Simple reverse proxy avec ligne de commande `docker`
+## [PARTIE 2] Configurer un reverse proxy sous Docker
+### Tâche 1 : Simple reverse proxy avec ligne de commande `docker`
 
 <details>
 <summary> Cliquer pour des liens utiles</summary>
@@ -148,64 +130,64 @@ L'explication du fonctionnement est disponible [ici](http://jasonwilder.com/blog
 
 > Si vous n'avez pas la tête à lire ça, la version abrégée est que le reverse proxy vous permet tout un tas de choses, y compris de gérer le fait que les containers ont des adresses IP (un peu) trop dynamiques, ce qui fait qu'à chaque changement/lancement de container, il y aurait des problèmes de binding de port. Le reverse proxy va vous permettre de cacher ces aspects-là, puisqu'ils seront gérés par ce composant. Ainsi, les chargements de versions modifiées de votre service n'auront pas besoin d'une gestion fine à la main des connexions, les différents utilisateurs qui voudront envoyer des requêtes simultanées au même service ne seront pas embêtés par des ports qui ne sont pas accessibles, etc.
 
-1. Lancement de nginx en reverse proxy :
+- Lancement de nginx en reverse proxy :
+> 
+> ```bash
+> docker run -d -p 8080:80 -v /var/run/docker.sock:/tmp/docker.sock -t jwilder/nginx-proxy
+> ```
+> 
+> ⚠️ Pour certaines installations comme sur la dernière édition de Fedora, les règles de sécurité par défaut ont évolué. Pour que le container puisse accéder à la socket Docker, il faut ajouter l'option suivante :
+> 
+> ```bash
+> docker run --security-opt=label:type:docker_t -d -p 8080:80 -v /var/run/docker.sock:/tmp/docker.sock -t jwilder/nginx-proxy
+> ```
+> 
+- Si vous êtes sur votre propre portable, modifiez votre fichier `/etc/hosts` pour faire correspondre **m** vers localhost. Ce serait à faire sur votre gestionnaire de nom de domaine en temps normal.
+> Vous devez avoir une ligne qui ressemble à cela :
+> 
+> ```txt
+> 127.0.0.1    localhost localhost.localdomain localhost4 localhost4.localdomain m
+> ```
+> 
+> Pour ceux qui n'ont pas les droits root, exécutez les commandes suivantes :
+> 
+> ```bash
+> echo 'm localhost' >> ~/.hosts
+> export HOSTALIASES=~/.hosts
+> curl m:8080
+> ```
+> 
+-  Puis créez plusieurs fenêtres dans votre terminal. Ce seront vos différentes machines host émulées. Vous pouvez en créer au moins 3 ou 4. Dans ces terminaux, lancez la commande suivante pour tester votre reverse proxy :
+> 
+> ```bash
+> docker run -e VIRTUAL_HOST=m -t -i nginx
+> ```
+> 
+- Testez votre reverse proxy en lançant la commande suivante dans votre terminal originel :
+> 
+> ```bash
+> curl m:8080
+> ```
+> 
+> En l'exécutant plusieurs fois et suffisamment rapidement, vous devriez voir tantôt une fenêtre terminator se mettre à jour, tantôt une autre. C'est l'effet du load balancer (un autre service qui est géré par votre nginx).
+> 
+> En tapant la commande suivante, vous pouvez regarder le fichier de configuration nginx qui sera généré à l'adresse suivante `/etc/nginx/conf.d/default.conf`. 
+> 
+> (N'oubliez pas de remplacer `865c1e67a00e` par l'id de votre nginx en reverse proxy (`docker ps`) pour récupérer la liste des containers en cours d'exécution) :
+> ```bash
+> docker exec -it 865c1e67a00e bash
+> ```
+> 
 
-```bash
-docker run -d -p 8080:80 -v /var/run/docker.sock:/tmp/docker.sock -t jwilder/nginx-proxy
-```
-
-⚠️ Pour certaines installations comme sur la dernière édition de Fedora, les règles de sécurité par défaut ont évolué. Pour que le container puisse accéder à la socket Docker, il faut ajouter l'option suivante :
-
-```bash
-docker run --security-opt=label:type:docker_t -d -p 8080:80 -v /var/run/docker.sock:/tmp/docker.sock -t jwilder/nginx-proxy
-```
-
-2. Si vous êtes sur votre propre portable, modifiez votre fichier `/etc/hosts` pour faire correspondre **m** vers localhost. Ce serait à faire sur votre gestionnaire de nom de domaine en temps normal.
-Vous devez avoir une ligne qui ressemble à cela :
-
-```txt
-127.0.0.1    localhost localhost.localdomain localhost4 localhost4.localdomain m
-```
-
-Pour ceux qui n'ont pas les droits root, exécutez les commandes suivantes :
-
-```bash
-echo 'm localhost' >> ~/.hosts
-export HOSTALIASES=~/.hosts
-curl m:8080
-```
-
-3. Puis créez plusieurs fenêtres dans votre terminal. Ce seront vos différentes machines host émulées. Vous pouvez en créer au moins 3 ou 4. Dans ces terminaux, lancez la commande suivante pour tester votre reverse proxy :
-
-```bash
-docker run -e VIRTUAL_HOST=m -t -i nginx
-```
-
-4. Testez votre reverse proxy en lançant la commande suivante dans votre terminal originel :
-
-```bash
-curl m:8080
-```
-
-En l'exécutant plusieurs fois et suffisamment rapidement, vous devriez voir tantôt une fenêtre terminator se mettre à jour, tantôt une autre. C'est l'effet du load balancer (un autre service qui est géré par votre nginx).
-
-En tapant la commande suivante, vous pouvez regarder le fichier de configuration nginx qui sera généré à l'adresse suivante `/etc/nginx/conf.d/default.conf`. 
-
-(N'oubliez pas de remplacer `865c1e67a00e` par l'id de votre nginx en reverse proxy (`docker ps`) pour récupérer la liste des containers en cours d'exécution) :
-```bash
-docker exec -it 865c1e67a00e bash
-```
+> ️️⚠️ N'oubliez pas de tuer les conteneurs lancés pour libérer des ressources :
+> 
+> ```bash
+> docker ps # pour avoir la liste
+> docker kill "IDDOCKER" # pour tuer un docker
+> ```
 
 
-️️⚠️ N'oubliez pas de tuer les conteneurs lancés :
-
-```bash
-docker ps # pour avoir la liste
-docker kill "IDDOCKER" # pour tuer un docker
-```
-
-
-### Étape 2: Configuration du reverse proxy avec Docker Compose
+### Tâche 2 : Configurer le reverse proxy dans un fichier Docker Compose
 <details>
 <summary>pour interagir avec un deploiement compose</summary>
 
@@ -215,7 +197,7 @@ docker kill "IDDOCKER" # pour tuer un docker
 - D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/docker/compose/).
 </details>
 
-1. Créez un fichier **docker-compose.yml** avec `jwilder/nginx-proxy`
+> - Créez un fichier **docker-compose.yml** avec `jwilder/nginx-proxy`
 
 <details>
 <summary>Cliquer pour un exemple</summary>
@@ -249,9 +231,9 @@ docker kill "IDDOCKER" # pour tuer un docker
 </details>
 
 
-2. Ajoutez un service nginx classique qui utiliserait le reverse proxy et donnez lui un nom vhost.
-3. Assurez-vous que votre fichier **/etc/hosts** contient une entrée pour le nom de domaine que vous avez choisi (vhost).
-4. Vérifiez que tout fonctionne correctement en accédant à l'URL du vhost.
+> - Ajoutez un service nginx classique qui utiliserait le reverse proxy et donnez lui un nom vhost.
+> - Assurez-vous que votre fichier **/etc/hosts** contient une entrée pour le nom de domaine que vous avez choisi (vhost).
+> - Vérifiez que tout fonctionne correctement en accédant à l'URL du vhost.
 
 
 <details>
@@ -261,10 +243,10 @@ docker kill "IDDOCKER" # pour tuer un docker
 - [Repo officiel jwilder/nginx-proxy](https://hub.docker.com/r/jwilder/nginx-proxy/)
 </details>
 
-### Étape 3: Docker Compose avec 4 Instances
-1. Maintenant que vous avez familiarisé avec Docker Compose et le reverse proxy, remplacez le service nginx par votre application Java en veillant à bien configurer les fichiers nécessaires.
-2. Vérifiez que l'application fonctionne correctement en accédant à l'URL du vhost.
-3. Créez un fichier `docker-compose-inst.yml` qui permet de deployer 4 instances de l'application.
+### Tâche 3  : Docker Compose avec 4 Instances
+> Maintenant que vous avez familiarisé avec Docker Compose et le reverse proxy, ajoutez au **docker-compose.yaml** votre application Java en veillant à bien configurer le service.
+> - Vérifiez que l'application fonctionne correctement en accédant à l'URL du vhost.
+> - Modifiez le fichier compose pour permettre l'exécution de 4 instances de l'application.
 
 <details>
 <summary>Cliquer pour des liens utiles</summary>
@@ -277,13 +259,11 @@ docker kill "IDDOCKER" # pour tuer un docker
 ## Rendu TP Docker
 - Un fichier `Dockerfile` pour l'application Java.
 - Un fichier `Dockerfile` pour l'application Java version light.
-- Un fichier `docker-compose.yml` avec le reverse proxy et un service web simple.
-- Un fichier `docker-compose-inst.yml` avec 4 instances de l'application Java.
-
+- Un fichier `docker-compose.yml` avec le reverse proxy, un service web simple et 4 instances de l'application Java.
 
 # Annexes
 <details>
-<summary>Annexe 1: Description de l'Application Java</summary>
+<summary>Annexe 1 : Description de l'Application Java</summary>
 
 # How to compile this application
 
