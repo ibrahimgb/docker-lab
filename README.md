@@ -248,6 +248,7 @@ docker kill "IDDOCKER" # pour tuer un docker
 >```
 </details>
 
+
 2. Ajoutez un service nginx classique qui utiliserait le reverse proxy et donnez lui un nom vhost.
 3. Assurez-vous que votre fichier **/etc/hosts** contient une entrée pour le nom de domaine que vous avez choisi (vhost).
 4. Vérifiez que tout fonctionne correctement en accédant à l'URL du vhost.
@@ -327,4 +328,3 @@ And run the application using the embedded Jetty plugin in http://localhost:8080
 ```
 
 </details>
-```
