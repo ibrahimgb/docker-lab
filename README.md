@@ -218,16 +218,32 @@ docker kill "IDDOCKER" # pour tuer un docker
 <details>
 <summary>Cliquer pour un exemple</summary>
 
-```yaml
-    version: '3'
-    services:
-      nginx-proxy:
-        image: jwilder/nginx-proxy
-        ports:
-          - "8080:80"
-        volumes:
-          - /var/run/docker.sock:/tmp/docker.sock
-```
+> Presque toutes les commandes Docker peuvent être traduites en fichier **docker-compose.yml**. Cela permet de "scripter" le lancement de plusieurs conteneurs et surtout permet de simplifier la communication entre eux. 
+> 
+> Par exemple, le fichier compose suivant permet de lancer deux conteneurs:
+> ```yaml
+> version: '3'
+> services:
+>  serviceA:
+>   image: debian
+>  command: ping serviceB
+> serviceB:
+>  image: debian
+> command: sleep 1000
+> ```
+> Le serviceA peut simplement ping le serviceB en utilisant son nom de service.
+
+> Pour le reverse proxy, le fichier **docker-compose.yml** pour démarrer pourrait ressembler à ceci:
+>```yaml
+> version: '3'
+> services:
+>      nginx-proxy:
+>        image: jwilder/nginx-proxy
+>        ports:
+>          - "8080:80"
+>        volumes:
+>          - /var/run/docker.sock:/tmp/docker.sock
+>```
 </details>
 
 2. Ajoutez un service nginx classique qui utiliserait le reverse proxy et donnez lui un nom vhost.
