@@ -82,6 +82,8 @@ D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/
 <summary>Étape 1 : version non scratch À EFFACER SI NON RETENUE</summary>
 
 ### Étape 1: Premiers pas avec Docker
+> Pour la syntaxe du Dockerfile, vous pouvez consulter la documentation officielle de Docker, lien ci-dessous.
+
 1. Création d'un `Dockerfile` à partir d'une image de base:
     - Utilisez une image de base de votre choix (debian, ubuntu, etc.).
     - Ajoutez `echo "Hello World"` en commande de démarrage.
@@ -226,10 +228,10 @@ docker kill "IDDOCKER" # pour tuer un docker
 > services:
 >  serviceA:
 >   image: debian
->  command: ping serviceB
+>   command: ping serviceB
 > serviceB:
 >  image: debian
-> command: sleep 1000
+>  command: sleep 1000
 > ```
 > Le serviceA peut simplement ping le serviceB en utilisant son nom de service.
 
