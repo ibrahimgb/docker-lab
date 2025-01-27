@@ -229,9 +229,9 @@ docker kill "IDDOCKER" # pour tuer un docker
 >  serviceA:
 >   image: debian
 >   command: ping serviceB
-> serviceB:
->  image: debian
->  command: sleep 1000
+>  serviceB:
+>   image: debian
+>   command: sleep 1000
 > ```
 > Le serviceA peut simplement ping le serviceB en utilisant son nom de service.
 
