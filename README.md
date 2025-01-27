@@ -213,7 +213,7 @@ docker kill "IDDOCKER" # pour tuer un docker
 - D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/docker/compose/).
 </details>
 
-1. Créez un fichier docker-compose.yml avec jwilder/nginx-proxy
+1. Créez un fichier **docker-compose.yml** avec `jwilder/nginx-proxy`
 
 <details>
 <summary>Cliquer pour un exemple</summary>
