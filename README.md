@@ -116,7 +116,7 @@ D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/
 - L'application est accessible sur le port 8080. Assurez-vous d'exposer ce port ou de le bind à un port de votre choix au démarrage du conteneur. Si tout est correct, http://localhost:8080 devrait être ouvert depuis votre navigateur.
 </details>
 
-### Étape 2: Créer une Version **Light** de l'Image
+### Étape 2: Créer une version _Light_ de l'Image
 
 Maintenant que vous avez une image fonctionnelle, vous allez essayer de la rendre plus légère. 
 
@@ -134,11 +134,15 @@ Maintenant que vous avez une image fonctionnelle, vous allez essayer de la rendr
 
 
 
-### Étape 1: Configuration Simple avec Nginx
+### Étape 1: Simple reverse proxy avec ligne de commande `docker`
 
-Pour le nginx en reverse proxy, nous allons partir de l'image \[suivante\](https://github.com/jwilder/nginx-proxy).
+<details>
+<summary> Cliquer pour des liens utiles</summary>
 
-L'explication du fonctionnement est disponible \[ici\](http://jasonwilder.com/blog/2014/03/25/automated-nginx-reverse-proxy-for-docker/).
+Pour le nginx en reverse proxy, nous allons partir de l'image [suivante](https://github.com/jwilder/nginx-proxy).
+
+L'explication du fonctionnement est disponible [ici](http://jasonwilder.com/blog/2014/03/25/automated-nginx-reverse-proxy-for-docker/).
+</details>
 
 > Si vous n'avez pas la tête à lire ça, la version abrégée est que le reverse proxy vous permet tout un tas de choses, y compris de gérer le fait que les containers ont des adresses IP (un peu) trop dynamiques, ce qui fait qu'à chaque changement/lancement de container, il y aurait des problèmes de binding de port. Le reverse proxy va vous permettre de cacher ces aspects-là, puisqu'ils seront gérés par ce composant. Ainsi, les chargements de versions modifiées de votre service n'auront pas besoin d'une gestion fine à la main des connexions, les différents utilisateurs qui voudront envoyer des requêtes simultanées au même service ne seront pas embêtés par des ports qui ne sont pas accessibles, etc.
 
@@ -175,7 +179,7 @@ curl m:8080
 docker run -e VIRTUAL_HOST=m -t -i nginx
 ```
 
-4.   Testez votre reverse proxy en lançant la commande suivante dans votre terminal originel :
+4. Testez votre reverse proxy en lançant la commande suivante dans votre terminal originel :
 
 ```bash
 curl m:8080
@@ -190,9 +194,8 @@ En tapant la commande suivante, vous pouvez regarder le fichier de configuration
 docker exec -it 865c1e67a00e bash
 ```
 
-- [source](http://jasonwilder.com/blog/2014/03/25/automated-nginx-reverse-proxy-for-docker/)
 
-Tuez tous les dockers nginx démarrés :
+️️⚠️ N'oubliez pas de tuer les conteneurs lancés :
 
 ```bash
 docker ps # pour avoir la liste
@@ -200,7 +203,7 @@ docker kill "IDDOCKER" # pour tuer un docker
 ```
 
 
-### Étape 2: Configuration Simple avec jwilder/nginx-proxy
+### Étape 2: Configuration du reverse proxy avec Docker Compose
 <details>
 <summary>pour interagir avec un deploiement compose</summary>
 
