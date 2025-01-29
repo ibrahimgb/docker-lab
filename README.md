@@ -53,7 +53,7 @@ Il est fortement conseillé de dérouler ce TP sur une machine Linux (Ubuntu, Fe
 
 - `docker run [nom_image]` : Démarre un conteneur à partir d'une image.
 - `docker ps` : Liste les conteneurs en cours d'exécution.
-- `docker exec -it [nom_conteneur] /bin/bash` : Exécute la commande `/bin/bash` dans un conteneur avec le mode interactif -] ça donne un shell (si bash est installé).
+- `docker exec -it [nom_conteneur] /bin/bash` : Exécute la commande `/bin/bash` dans un conteneur avec le mode interactif -> ça donne un shell (si bash est installé).
 - `docker stop [nom_conteneur]` : Arrête un conteneur.
 - `docker rm [nom_conteneur]` : Supprime un conteneur.
 - `docker logs [nom_conteneur]` : Affiche les logs d'un conteneur.
@@ -72,6 +72,14 @@ D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/
 > Compilez maintenant le fichier `hello.c` avec `gcc -static -o hello hello.c` et utilisez ce binaire au lieu de `hello_dyn`.
 >   - Quelle est la différence entre les deux commandes de compilation ?
 
+> Corrigez maintenant le Dockerfile pour faire fonctionner le binaire dynamique aussi.
+
+<details>
+<summary>Cliquer pour des indices</summary>
+
+- Lisez bien les erreurs sur terminal au lancement du conteneur. Ajoutez à l'image ce qui manque.
+</details>
+
 ### Tâche 2 : Containériser une application existante
 
 > Maintenant, on va utiliser comme image de base quelque chose de plus traditionnel, par exemple `ubuntu:18.04` (ou voir d'autres images pertinentes dans le Docker Hub).
@@ -89,18 +97,15 @@ D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/
 <details>
 <summary>Cliquer pour des indices</summary>
     
-- Installez des dépendances comme OpenJDK, Maven, et OpenCV. 
-```shell
-    apt-get update
-    apt-get install -y openjdk-8-jdk
-    apt-get install -y maven
-    apt-get install -f libpng16-16
-    apt-get install -f libjasper1
-    apt-get install -f libdc1394-22
-```
-- Installez OpenCV avec `mvn install:install-file -Dfile=./lib/opencv-3410.jar -DgroupId=org.opencv  -DartifactId=opencv -Dversion=3.4.10 -Dpackaging=jar` (Adaptez les path en fonction de votre Dockerfile).
-- Utilisez `mvn package` pour compiler l'application.
-- Utilisez `java -Djava.library.path=lib/ -jar target/fatjar-0.0.1-SNAPSHOT.jar` pour exécuter l'application. (Utilisez lib/ubuntuupperthan18 si vous avez comme image une version d'Ubuntu supérieure à 18.04)
+- Installez des dépendances comme OpenJDK, Maven, et OpenCV :
+  - `openjdk-8-jdk maven libpng16-16 libjasper1 libdc1394-22`
+- Installez OpenCV avec :
+  - `mvn install:install-file -Dfile=./lib/opencv-3410.jar -DgroupId=org.opencv  -DartifactId=opencv -Dversion=3.4.10 -Dpackaging=jar` (Adaptez les path en fonction de votre Dockerfile).
+- Pour compiler l'application :
+  - `mvn package`
+- Pour exécuter l'application :
+  - `java -Djava.library.path=lib/ -jar target/fatjar-0.0.1-SNAPSHOT.jar`
+  - si vous avez Ubuntu > 18.04, utilisez `java -Djava.library.path=lib/ubuntuupperthan18 -jar target/fatjar-0.0.1-SNAPSHOT.jar`
 - L'application est accessible sur le port 8080. Assurez-vous d'exposer ce port ou de le bind à un port de votre choix au démarrage du conteneur. Si tout est correct, http://localhost:8080 devrait être ouvert depuis votre navigateur.
 </details>
 
