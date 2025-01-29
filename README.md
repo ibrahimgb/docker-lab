@@ -98,6 +98,7 @@ D'autres commandes sont disponibles [ici](https://docs.docker.com/reference/cli/
     apt-get install -f libjasper1
     apt-get install -f libdc1394-22
 ```
+- Installez OpenCV avec `mvn install:install-file -Dfile=./lib/opencv-3410.jar -DgroupId=org.opencv  -DartifactId=opencv -Dversion=3.4.10 -Dpackaging=jar` (Adaptez les path en fonction de votre Dockerfile).
 - Utilisez `mvn package` pour compiler l'application.
 - Utilisez `java -Djava.library.path=lib/ -jar target/fatjar-0.0.1-SNAPSHOT.jar` pour exécuter l'application. (Utilisez lib/ubuntuupperthan18 si vous avez comme image une version d'Ubuntu supérieure à 18.04)
 - L'application est accessible sur le port 8080. Assurez-vous d'exposer ce port ou de le bind à un port de votre choix au démarrage du conteneur. Si tout est correct, http://localhost:8080 devrait être ouvert depuis votre navigateur.
@@ -285,9 +286,9 @@ OpenCV is a native library with Java bindings so you need to install this to you
 There are good instructions how to build OpenCV with Java bindings for your own platform here: http://docs.opencv.org/doc/tutorials/introduction/desktop_java/java_dev_intro.html
 
 Once you have built the Java library you can install the resulting jar file to your local Maven repository using
-     mvn install:install-file -Dfile=./lib/opencv-3410.jar \
-     -DgroupId=org.opencv  -DartifactId=opencv -Dversion=3.4.10 -Dpackaging=jar
-
+```shell     
+mvn install:install-file -Dfile=./lib/opencv-3410.jar -DgroupId=org.opencv  -DartifactId=opencv -Dversion=3.4.10 -Dpackaging=jar
+```
 
 2. Building this application
 ----
