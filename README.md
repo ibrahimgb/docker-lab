@@ -20,7 +20,7 @@ Ensuite, nous allons configurer Docker Compose pour déployer plusieurs instance
 
 # Modalités de rendu
 
-Tous les rendus TLC se font à travers le gitlab de l'ISTIC : https://gitlab.istic.univ-rennes1.fr/
+Tous les rendus TLC se font à travers le gitlab de l'ISTIC : https://gitlab2.istic.univ-rennes1.fr/
 
 Si vous ne l'avez pas déjà fait, créez sur Gitlab ISTIC un groupe nommé `TLC_2025_<votre_nom>_<votre_prenom>` 
 
