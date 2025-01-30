@@ -24,7 +24,7 @@ Tous les rendus TLC se font à travers le gitlab de l'ISTIC : https://gitlab2.is
 
 Si vous ne l'avez pas déjà fait, créez sur Gitlab ISTIC un groupe nommé `TLC_2025_<votre_nom>_<votre_prenom>` 
 
-Pour chaque TP, vous devrez créer un projet dans ce groupe, nommé `TP<numero>_<votre_nom>_<votre_prenom>` et le projet finale nommé `Projet_<votre_nom>_<votre_prenom>`
+Pour chaque TP, vous devrez créer un projet dans ce groupe (il est fortement conseillé de fork le repo du projet en le plaçant dans votre groupe gitlab), nommé `TP<numero>_<votre_nom>_<votre_prenom>` et le projet finale nommé `Projet_<votre_nom>_<votre_prenom>`
 
 Pour chaque TP, vous devrez ajouter votre enseignant en tant que membre du projet avec le rôle de "Reporter" pour permettre la correction.
 
@@ -263,6 +263,7 @@ L'explication du fonctionnement est disponible [ici](http://jasonwilder.com/blog
 
 
 ## Rendu TP Docker
+- Un fichier `Dockerfile` pour l'image scratch avec le binaire dynamique.
 - Un fichier `Dockerfile` pour l'application Java.
 - Un fichier `Dockerfile` pour l'application Java version light.
 - Un fichier `docker-compose.yml` avec le reverse proxy, un service web simple et 4 instances de l'application Java.
