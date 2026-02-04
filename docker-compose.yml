@@ -1,0 +1,76 @@
+services:
+  # Reverse proxy
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "8080:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - app-network
+
+  # Test web
+  web:
+    image: nginx:latest
+    container_name: simple-web
+    environment:
+      - VIRTUAL_HOST=web.local
+    networks:
+      - app-network
+
+  # App 1
+  app1:
+    build:
+      context: ./step1.2
+      dockerfile: Dockerfile
+    container_name: java-app-1
+    environment:
+      - VIRTUAL_HOST=app.local
+    depends_on:
+      - nginx-proxy
+    networks:
+      - app-network
+
+  # App 2
+  app2:
+    build:
+      context: ./step1.2
+      dockerfile: Dockerfile
+    container_name: java-app-2
+    environment:
+      - VIRTUAL_HOST=app.local
+    depends_on:
+      - nginx-proxy
+    networks:
+      - app-network
+
+  # App 3
+  app3:
+    build:
+      context: ./step1.2
+      dockerfile: Dockerfile
+    container_name: java-app-3
+    environment:
+      - VIRTUAL_HOST=app.local
+    depends_on:
+      - nginx-proxy
+    networks:
+      - app-network
+
+  # App 4
+  app4:
+    build:
+      context: ./step1.2
+      dockerfile: Dockerfile
+    container_name: java-app-4
+    environment:
+      - VIRTUAL_HOST=app.local
+    depends_on:
+      - nginx-proxy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
