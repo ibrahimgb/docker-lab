@@ -1,0 +1,7 @@
+SERVICE       STATE     PORTS
+app1          running   8080/tcp
+app2          running   8080/tcp
+app3          running   8080/tcp
+app4          running   8080/tcp
+nginx-proxy   running   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+web           running   80/tcp

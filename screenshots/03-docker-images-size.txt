@@ -1,0 +1,3 @@
+java-app:light                                    969MB
+java-app:regular                                  1.39GB
+hello-scratch:latest                              1.14MB
